@@ -25,5 +25,9 @@ cause final command-line arguments is larger than the arguments buffer space
 12. `mkdir -p /tmp/new_path_directory/bash`  
 `cp /bin/bash /tmp/new_path_directory/bash`  
 `PATH=/tmp/new_path_directory/bash:$PATH`  
-13. The commands of a batch job run sequentially one after another while the commands in at jobs may run in parallel.
+13. at executes commands at specified time  
+batch executes commands when system load levels permit  
+*(at запускает команды в указанное время, 
+а batch запускает команды в зависимости от загруженности системы, 
+например: запустить команду, когда уровень загрузки процессора будет ниже 1%)*
 14. complete
