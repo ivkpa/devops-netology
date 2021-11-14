@@ -28,6 +28,46 @@ cause final command-line arguments is larger than the arguments buffer space
 13. at executes commands at specified time  
 batch executes commands when system load levels permit  
 *(at запускает команды в указанное время, 
-а batch запускает команды в зависимости от загруженности системы, 
-например: запустить команду, когда уровень загрузки процессора будет ниже 1%)*
+а batch запускает команды в зависимости от загруженности системы (load average), 
+например: запустить команду, когда уровень средней загрузки системы будет ниже 0.1)*
 14. complete
+
+----------------------------------------------------------------------
+3.2.2  
+  
+1. cd is a shell builtin  
+*(Чисто теоретически это могла бы быть функция, изменяющая значение переменной $PWD,   
+если бы итог работы cd был только в изменении $PWD, но это не так)*
+2. grep -c <some_string> <some_file>
+3. systemd
+4. `ls -error 2> /dev/pts/<session>`
+5. `grep UseDNS < /etc/ssh/sshd_config > ~/grep_output_file`
+6. `echo test > $(tty)`
+7. `bash 5>&1`  
+(откроется "на запись" командная оболочка bash с присвоенным файл дескриптором 5 с перенаправлением на stdout терминала)  
+`echo netology > /proc/$$/fd/5`  
+*(вывод команды echo перенаправляется на fd 5, который в свою очередь перенаправляет вывод на stdout терминала)*
+8. `bash 5>&1`  
+`ls -error 2>&1 1>&5 | grep invalid`
+9. `cat /proc/$$/environ`  
+`env`  
+`ps e -p $$`  
+*(Выводятся все переменные окружения и их значения в текущей сессии пользователя)*
+10. `proc/[pid]/cmdline`  
+Read-only file holds the complete command line for the process,   
+unless process is a zombie.  
+`proc/[pid]/exe`  
+Symbolic link containing the actual path-name of the executed command.  
+11. `cat /proc/cpuinfo | grep sse`  
+`cat /proc/cpuinfo | grep -oE '\b[s]?sse[^ ]*'`  
+sse sse2 ssse3 sse4_1 sse4_2  
+12. `ssh -t localhost 'tty'`  
+*(По умолчанию при выполнении удаленной команды через SSH не происходит аллокации TTY для удаленной сессии,
+т.к. эта сессия может быть использована для передачи файлов или другого содержимого. Аргумент -t используется для принудительного создания TTY)*
+13. `top` ctrl+z  
+`disown top`  
+`screen`  
+`reptyr $(pgrep top)` ctrl+a " 0  
+14. Команда tee считывает stdin и записывает его одновременно в stdout и в один или несколько подготовленных файлов.  
+Конструкция `echo string | sudo tee /root/new_file` работает, т.к. предоставляются привелегии команде tee, которая непосредственно  
+(**не** через перенаправление, которым занимается процесс shell'а с правами пользователя) производит запись в файл.
