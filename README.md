@@ -1,3 +1,30 @@
+3.4.2  
+  
+1. done
+2. CPU - `node_cpu_seconds_total{cpu="0",mode="system"}`  
+Memory - `node_memory_MemTotal_bytes - node_memory_MemFree_bytes`  
+Disk - `node_disk_io_time_seconds_total{device="sda"}`  
+Network - `node_network_receive_bytes_total{device="enp0s3"}`
+3. done
+4. y  
+CPU MTRRs all blank - virtualized system.  
+systemd[1]: Detected virtualization oracle. 
+5. `sysctl -a | grep fs.nr_open`  
+fs.nr_open = 1048576  
+fs.nr_open is a limit for fd open  
+`ulimit -n` aswell
+6. root@ubuntu:/# `ps aux`  
+```
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND  
+root           1  0.0  0.0   5476   592 pts/2    S    18:22   0:00 sleep 1h  
+root           2  0.2  0.1   8284  5252 pts/2    S    18:23   0:00 -bash  
+root          14  0.0  0.0   8892  3288 pts/2    R+   18:23   0:00 ps aux  
+```
+7. fork bomb  
+: - function name  
+\[Fri Nov 26 18:35:56 2021\] cgroup: fork rejected by pids controller in /user.slice/user-1000.slice/session-1.scope  
+`ulimit -u 50` helps to limit amount of processes per user
+
 3.3.1  
 
 1. `chdir("/tmp")`  
