@@ -1,3 +1,42 @@
+3.8.3
+  
+1. `show ip route 109.195.102.158`  
+```
+Routing entry for 109.195.96.0/20
+  Known via "bgp 6447", distance 20, metric 0
+  Tag 6939, type external
+  Last update from 64.71.137.241 1w4d ago
+  Routing Descriptor Blocks:
+  * 64.71.137.241, from 64.71.137.241, 1w4d ago
+      Route metric is 0, traffic share count is 1
+      AS Hops 6
+      Route tag 6939
+      MPLS label: none
+```
+2. `ip route show`  
+```
+default via 10.0.2.2 dev eth0 proto dhcp src 10.0.2.15 metric 100
+8.8.8.0/24 via 10.0.2.3 dev eth0
+8.8.8.8 via 10.0.2.2 dev eth0
+10.0.2.0/24 dev eth0 proto kernel scope link src 10.0.2.15
+10.0.2.2 dev eth0 proto dhcp scope link src 10.0.2.15 metric 100
+```
+
+3. `ss -tpl`  
+```
+Netid  State   Recv-Q  Send-Q                                Local Address:Port                  Peer Address:Port   Process
+tcp    LISTEN  0       128                                         0.0.0.0:ssh                        0.0.0.0:*       users:(("sshd",pid=703,fd=3))
+tcp    LISTEN  0       4096                                        0.0.0.0:sunrpc                     0.0.0.0:*       users:(("rpcbind",pid=603,fd=4),("systemd",pid=1,fd=37))
+```
+4. `ss -upl`
+```
+State          Recv-Q         Send-Q                  Local Address:Port                     Peer Address:Port         Process
+UNCONN         0              0                       127.0.0.53%lo:domain                        0.0.0.0:*             users:(("systemd-resolve",pid=604,fd=12))
+UNCONN         0              0                      10.0.2.15%eth0:bootpc                        0.0.0.0:*             users:(("systemd-network",pid=401,fd=19))
+
+```
+5. ![Home Network](https://github.com/ivkpa/devops-netology/blob/main/images/3.8.3-5-1.png)
+------------------------------------
 3.7.2  
   
 1. Win - `ipconfig`, linux - `ip link show`  
