@@ -1,3 +1,48 @@
+3.7.2  
+  
+1. Win - `ipconfig`, linux - `ip link show`  
+2. LLDP; lldpd; lldpctl.
+3. VLAN; vlan.  
+```
+vi /etc/network/interfaces
+auto vlan1400
+iface vlan1400 inet static        
+            address 192.168.1.1        
+            netmask 255.255.255.0        
+            vlan_raw_device eth0
+```
+4. Bonding; balance-rr, active-backup, balance-xor, broadcast, 802.3ad, balance-tlb, balance-alb  
+`cat /etc/network/interfaces`
+```
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+auto bond0 eth0 eth1
+# настроим параметры бонд-интерфейса
+iface bond0 inet static
+        address 10.0.0.11
+        netmask 255.255.255.0
+        gateway 10.0.0.254
+        # определяем объединяемые интерфейсы
+        bond-slaves eth0 eth1
+        # задаем тип бондинга
+        bond-mode balance-alb
+        # интервал проверки линии в миллисекундах
+        bond-miimon 100
+        # Задержка перед установкой соединения в миллисекундах
+        bond-downdelay 200
+        # Задержка перед обрывом соединения в миллисекундах
+        bond-updelay 200
+```
+5. /29 - 8ips; 32 /29 subnets from /24 network;  
+10.10.10.8/29, 10.10.10.16/29, 10.10.10.248/29
+6. 100.64.0.0/26
+7. Win - `arp -a`, `arp -d ip`, `arp -d *`;  
+Linux - `ip neigh show`, `ip neigh del ip dev int`, `ip -s neigh flush all` 
+  
+-----------------------------------
 3.6.1  
   
 1. HTTP/1.1 301 Moved Permanently is used for permanent redirecting
@@ -39,6 +84,7 @@
 8. `dig -x 8.8.8.8 | grep dns.google.`  
 `dig -x 8.8.4.4 | grep dns.google.`
 
+------------------------------------------------
 3.5  
 1. Файл, в котором последовательности нулевых байтов заменены на информацию об этих последовательностях (список дыр).  
 2. Нет. Потому что это один и тот же объект.  
@@ -88,7 +134,7 @@ sdc                    8:32   0  2.5G  0 disk
 19. 0
 20. done  
 
-
+-----------------------------------
 3.4.2  
   
 1. done
@@ -116,6 +162,7 @@ root          14  0.0  0.0   8892  3288 pts/2    R+   18:23   0:00 ps aux
 \[Fri Nov 26 18:35:56 2021\] cgroup: fork rejected by pids controller in /user.slice/user-1000.slice/session-1.scope  
 `ulimit -u 50` helps to limit amount of processes per user
 
+-----------------------------
 3.3.1  
 
 1. `chdir("/tmp")`  
