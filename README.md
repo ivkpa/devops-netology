@@ -1,7 +1,7 @@
 3.6.1  
   
 1. HTTP/1.1 301 Moved Permanently is used for permanent redirecting
-2. 307 Internal Redirect  
+2. 307 Internal Redirect, document 528ms
 ![F12](https://github.com/ivkpa/devops-netology/blob/main/images/3.6.1-2-1.png)
 3. 109.195.102.158
 4. CJSC "ER-Telecom Holding" Yekaterinburg branch AS51604 
