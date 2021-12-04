@@ -13,7 +13,20 @@ Routing entry for 109.195.96.0/20
       Route tag 6939
       MPLS label: none
 ```
-2. `ip route show`  
+2. `echo "dummy" >> /etc/modules`  
+`echo "options dummy numdummies=2" > /etc/modprobe.d/dummy.conf`  
+`vim /etc/network/interfaces`  
+```
+auto dummy0
+iface dummy0 inet static
+        address 10.2.2.2/32
+        pre-up ip link add dummy0 type dummy
+        post-down ip link del dummy0
+```
+`ifup dummy0`  
+`ip route add 8.8.8.8/32 via 10.0.2.2`  
+`ip route add 8.8.8.0/24 via 10.0.2.3`  
+`ip route show`  
 ```
 default via 10.0.2.2 dev eth0 proto dhcp src 10.0.2.15 metric 100
 8.8.8.0/24 via 10.0.2.3 dev eth0
