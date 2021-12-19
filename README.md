@@ -1,3 +1,62 @@
+3.9  
+1. done
+2. done
+3.  
+```
+apt install apache2
+a2enmod ssl
+systemctl restart apache2
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+-keyout /etc/ssl/private/apache-selfsigned.key \
+-out /etc/ssl/certs/apache-selfsigned.crt \
+-subj "/C=RU/ST=Moscow/L=Moscow/O=Company Name/OU=Org/CN=devops"
+
+vim /etc/apache2/sites-available/devops.conf
+<VirtualHost *:443>
+ServerName devops
+DocumentRoot /var/www/devops
+SSLEngine on
+SSLCertificateFile /etc/ssl/certs/apache-selfsigned.crt
+SSLCertificateKeyFile /etc/ssl/private/apache-selfsigned.key
+</VirtualHost>
+
+mkdir /var/www/devops
+
+vim /var/www/devops/index.html
+<h1>it worked!</h1>
+
+vim /etc/hosts
+127.0.0.1 devops
+
+a2ensite devops.conf
+apache2ctl configtest
+systemctl reload apache2
+
+curl https://devops -k
+<h1>It worked!</h1>
+```
+4. `git clone --depth 1 https://github.com/drwetter/testssl.sh.git`  
+`cd testssl.sh`  
+`./testssl.sh -U --sneaky https://xpug.ru/`
+5. `apt install openssh-server`  
+`systemctl start sshd.service`  
+`systemctl enable sshd.service`  
+`ssh-keygen`  
+`ssh-copy-id user@server`  
+`ssh user@server`  
+6. `mv ~/.ssh/id_rsa ~/.ssh/newserver.key`  
+`touch ~/.ssh/config && chmod 600 ~/.ssh/config`  
+`vim ~/.ssh/config`
+```
+Host newserver
+    HostName 10.0.2.15
+    IdentityFile ~/.ssh/newserver.key
+    User user
+```
+`ssh newserver`
+7. ` tcpdump -i eth0 -c 100 -w 0001.pcap`
+---
 3.8.3
   
 1. `show ip route 109.195.102.158`  
@@ -49,7 +108,7 @@ UNCONN         0              0                      10.0.2.15%eth0:bootpc      
 
 ```
 5. ![Home Network](https://github.com/ivkpa/devops-netology/blob/main/images/3.8.3-5-1.png)
-------------------------------------
+---
 3.7.2  
   
 1. Win - `ipconfig`, linux - `ip link show`  
@@ -94,7 +153,7 @@ iface bond0 inet static
 7. Win - `arp -a`, `arp -d ip`, `arp -d *`;  
 Linux - `ip neigh show`, `ip neigh del ip dev int`, `ip -s neigh flush all` 
   
------------------------------------
+---
 3.6.1  
   
 1. HTTP/1.1 301 Moved Permanently is used for permanent redirecting
@@ -136,7 +195,7 @@ Linux - `ip neigh show`, `ip neigh del ip dev int`, `ip -s neigh flush all`
 8. `dig -x 8.8.8.8 | grep dns.google.`  
 `dig -x 8.8.4.4 | grep dns.google.`
 
-------------------------------------------------
+---
 3.5  
 1. Файл, в котором последовательности нулевых байтов заменены на информацию об этих последовательностях (список дыр).  
 2. Нет. Потому что это один и тот же объект.  
@@ -186,7 +245,7 @@ sdc                    8:32   0  2.5G  0 disk
 19. 0
 20. done  
 
------------------------------------
+---
 3.4.2  
   
 1. done
@@ -214,7 +273,7 @@ root          14  0.0  0.0   8892  3288 pts/2    R+   18:23   0:00 ps aux
 \[Fri Nov 26 18:35:56 2021\] cgroup: fork rejected by pids controller in /user.slice/user-1000.slice/session-1.scope  
 `ulimit -u 50` helps to limit amount of processes per user
 
------------------------------
+---
 3.3.1  
 
 1. `chdir("/tmp")`  
@@ -239,7 +298,7 @@ root          14  0.0  0.0   8892  3288 pts/2    R+   18:23   0:00 ps aux
 Хорошо использовать в сценариях т.к. с этими опциями написанный код лучше проверяется на корректность и его проще диагностировать в случае каких-либо ошибок или некорректной работы.  
 9. S - interruptible sleep (waiting for an event to complete)  
 
----------------------------------------------------------------------------------------------------
+---
 3.2.2  
 
 1. cd is a shell builtin  
@@ -279,7 +338,7 @@ sse sse2 ssse3 sse4_1 sse4_2
 Конструкция `echo string | sudo tee /root/new_file` работает, т.к. предоставляются привелегии команде tee, которая непосредственно  
 (**не** через перенаправление, которым занимается процесс shell'а с правами пользователя) производит запись в файл.
 
------------------------------------------------------------------------------------------------
+---
 3.1.1  
 
 1. complete
@@ -314,4 +373,4 @@ batch executes commands when system load levels permit
 например: запустить команду, когда уровень средней загрузки системы будет ниже 0.1)*
 14. complete
 
-----------------------------------------------------------------------
+---
