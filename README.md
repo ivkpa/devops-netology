@@ -1,3 +1,147 @@
+4.2
+
+# Домашнее задание к занятию "4.2. Использование Python для решения типовых DevOps задач"
+
+## Обязательная задача 1
+
+Есть скрипт:
+```python
+#!/usr/bin/env python3
+a = 1
+b = '2'
+c = a + b
+```
+
+### Вопросы:
+| Вопрос  | Ответ |
+| ------------- | ------------- |
+| Какое значение будет присвоено переменной `c`?  | not defined  |
+| Как получить для переменной `c` значение 12?  | с=12 или c=str(a)+b  |
+| Как получить для переменной `c` значение 3?  | c=3 или c=a+int(b)  |
+
+## Обязательная задача 2
+Мы устроились на работу в компанию, где раньше уже был DevOps Engineer. Он написал скрипт, позволяющий узнать, какие файлы модифицированы в репозитории, относительно локальных изменений. Этим скриптом недовольно начальство, потому что в его выводе есть не все изменённые файлы, а также непонятен полный путь к директории, где они находятся. Как можно доработать скрипт ниже, чтобы он исполнял требования вашего руководителя?
+
+```python
+#!/usr/bin/env python3
+
+import os
+
+bash_command = ["cd ~/netology/sysadm-homeworks", "git status"]
+result_os = os.popen(' && '.join(bash_command)).read()
+is_change = False
+for result in result_os.split('\n'):
+    if result.find('modified') != -1:
+        prepare_result = result.replace('\tmodified:   ', '')
+        print(prepare_result)
+        break
+```
+
+### Ваш скрипт:
+```python
+#!/usr/bin/env python3
+
+import os
+
+path_to_git_dir = "~/netology/sysadm-homeworks"
+
+bash_command = ["cd "+path_to_git_dir, "git status"]
+result_os = os.popen(' && '.join(bash_command)).read()
+
+for result in result_os.splitlines():
+    if result.find('modified') != -1:
+        prepare_result = result.replace('modified:', '')
+        print(path_to_git_dir+"/"+prepare_result.strip())
+```
+
+### Вывод скрипта при запуске при тестировании:
+```
+~/netology/sysadm-homeworks/01-intro-01/README.md
+~/netology/sysadm-homeworks/README.md
+```
+
+## Обязательная задача 3
+1. Доработать скрипт выше так, чтобы он мог проверять не только локальный репозиторий в текущей директории, а также умел воспринимать путь к репозиторию, который мы передаём как входной параметр. Мы точно знаем, что начальство коварное и будет проверять работу этого скрипта в директориях, которые не являются локальными репозиториями.
+
+### Ваш скрипт:
+```python
+#!/usr/bin/env python3
+
+import os, sys
+
+path_to_git_dir = "~/netology/sysadm-homeworks"
+
+if len(sys.argv)==2:
+    if not os.path.exists(sys.argv[1]) or not os.path.isdir(sys.argv[1]):
+        print(f'{sys.argv[1]} directory is not found')
+        exit(1)
+    path_to_git_dir = sys.argv[1]
+
+bash_command = ["cd "+path_to_git_dir, "git status"]
+result_os = os.popen(' && '.join(bash_command)).read()
+
+for result in result_os.splitlines():
+    if result.find('modified') != -1:
+        prepare_result = result.replace('modified:', '')
+        print(path_to_git_dir+"/"+prepare_result.strip())
+```
+
+### Вывод скрипта при запуске при тестировании:
+```
+/home/vagrant/netology/sysadm-homeworks//01-intro-01/README.md
+/home/vagrant/netology/sysadm-homeworks//README.md
+```
+
+## Обязательная задача 4
+1. Наша команда разрабатывает несколько веб-сервисов, доступных по http. Мы точно знаем, что на их стенде нет никакой балансировки, кластеризации, за DNS прячется конкретный IP сервера, где установлен сервис. Проблема в том, что отдел, занимающийся нашей инфраструктурой очень часто меняет нам сервера, поэтому IP меняются примерно раз в неделю, при этом сервисы сохраняют за собой DNS имена. Это бы совсем никого не беспокоило, если бы несколько раз сервера не уезжали в такой сегмент сети нашей компании, который недоступен для разработчиков. Мы хотим написать скрипт, который опрашивает веб-сервисы, получает их IP, выводит информацию в стандартный вывод в виде: <URL сервиса> - <его IP>. Также, должна быть реализована возможность проверки текущего IP сервиса c его IP из предыдущей проверки. Если проверка будет провалена - оповестить об этом в стандартный вывод сообщением: [ERROR] <URL сервиса> IP mismatch: <старый IP> <Новый IP>. Будем считать, что наша разработка реализовала сервисы: `drive.google.com`, `mail.google.com`, `google.com`.
+
+### Ваш скрипт:
+```python
+#!/usr/bin/env python3
+
+import os, socket, json
+
+data_file = 'dns-ip.json'
+
+if not os.path.exists(data_file) or os.path.isdir(data_file):
+    data = {}
+    data['servers'] = []
+    server_dns_list = ['drive.google.com', 'mail.google.com', 'google.com']
+    for server_dns in server_dns_list:
+        data['servers'].append( {
+        'dns': server_dns,
+        'ip': socket.gethostbyname(server_dns)
+        })
+    with open(data_file, 'w') as outfile:
+        json.dump(data, outfile)
+
+
+with open(data_file) as json_file:
+    data = json.load(json_file)
+
+write_new_data = False
+for server in data['servers']:
+    curr_ip = socket.gethostbyname(server['dns'])
+    print(f'{server["dns"]} - {curr_ip}')
+    if curr_ip != server['ip']:
+        print(f'[ERROR] {server["dns"]} IP mismatch: old {server["ip"]} new {curr_ip}')
+        write_new_data = True
+        server['ip'] = curr_ip
+
+if write_new_data:
+    with open(data_file, 'w') as outfile:
+        json.dump(data, outfile)
+```
+
+### Вывод скрипта при запуске при тестировании:
+```
+drive.google.com - 209.85.233.194
+mail.google.com - 173.194.222.18
+google.com - 64.233.162.102
+[ERROR] google.com IP mismatch: old 64.233.162.100 new 64.233.162.102
+
+```
+---
 4.1  
 
 1. `bash`
