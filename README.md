@@ -1,3 +1,119 @@
+4.1  
+
+1. `bash`
+```bash
+a=1
+b=2
+c=a+b
+d=$a+$b
+e=$(($a+$b))
+```
+
+| Переменная  | Значение | Обоснование |
+| ------------- | ------------- | ------------- |
+| `a`  | 1  | Оператор = присваивает значение переменной |
+| `b`  | 2  | - " - |
+| `c`  | a+b  | Без $ a и b - просто символы |
+| `d`  | 1+2  | Подставляет значения переменных $a и $b и выводит строку (без операций вычисления) |
+| `e`  | 3  | Производит вычисление |
+
+2. Первая строка две скобки в конце, а не одна.  
+В цикле в условии нет else exit 0 для корректного завершения скрипта на случай когда сервис станет доступным.  
+
+```bash
+while ((1==1))
+do
+	curl https://localhost:4757
+	if (($? != 0))
+	then
+		date >> curl.log
+	else
+	    exit 0
+	fi
+done
+```
+
+
+3. Скрипт:
+```bash
+#!/usr/bin/env bash
+
+testcon() {
+
+if [ -z "$1" ]
+then
+        echo no host specified
+        exit 1
+fi
+
+date >> log
+
+curl -k -m 3 http://$1:80
+
+if [ "$?" -eq "0" ]
+then
+        echo $1:80 is available >> log
+else
+        echo $1:80 is unavailable >> log
+fi
+
+echo  >> log
+sleep 1
+}
+
+
+testcurrcount=0
+while (($testcurrcount<5))
+do
+        let "testcurrcount += 1"
+        testcon 192.168.0.1
+        testcon 173.194.222.113
+        testcon 87.250.250.242
+done
+
+```
+
+4. Скрипт:
+```bash
+#!/usr/bin/env bash
+
+testcon() {
+
+if [ -z "$1" ]
+then
+        echo no host specified
+        exit 1
+fi
+
+date >> log
+
+curl -k -m 3 http://$1:80
+
+if [ "$?" -eq "0" ]
+then
+        echo $1:80 is available >> log
+else
+        echo $1:80 is unavailable >> log
+        date >> error
+        echo $1 >> error
+        exit 1
+fi
+
+echo  >> log
+sleep 1
+}
+
+
+while ((1==1))
+do
+        testcon 192.168.0.1
+        testcon 173.194.222.113
+        testcon 87.250.250.242
+done
+
+```
+
+---
 3.9  
 1. done
 2. done
