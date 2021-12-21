@@ -397,15 +397,16 @@ curl https://devops -k
 `ssh user@server`  
 6. `mv ~/.ssh/id_rsa ~/.ssh/newserver.key`  
 `touch ~/.ssh/config && chmod 600 ~/.ssh/config`  
-`vim ~/.ssh/config`
+`vim ~/.ssh/config`  
 ```
 Host newserver
     HostName 10.0.2.15
     IdentityFile ~/.ssh/newserver.key
     User user
-```
-`ssh newserver`
+```  
+`ssh newserver`  
 7. ` tcpdump -i eth0 -c 100 -w 0001.pcap`
+
 ---
 3.8.3
   
