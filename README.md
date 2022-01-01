@@ -1,4 +1,4 @@
-4.3
+<a name="4.3">4.3</a>
 # Домашнее задание к занятию "4.3. Языки разметки JSON и YAML"
 
 
@@ -88,7 +88,7 @@ servers:
 
 ```
 
-4.2
+<a name="4.2">4.2</a>
 
 # Домашнее задание к занятию "4.2. Использование Python для решения типовых DevOps задач"
 
@@ -232,7 +232,7 @@ google.com - 64.233.162.102
 
 ```
 ---
-4.1  
+<a name="4.1">4.1</a>  
 
 1. `bash`
 ```bash
@@ -348,7 +348,7 @@ done
 ```
 
 ---
-3.9  
+<a name="3.9">3.9</a>  
 1. done
 2. done
 3.  
@@ -408,7 +408,7 @@ Host newserver
 7. ` tcpdump -i eth0 -c 100 -w 0001.pcap`
 
 ---
-3.8.3
+<a name="3.8.3">3.8.3</a>
   
 1. `show ip route 109.195.102.158`  
 ```
@@ -460,7 +460,7 @@ UNCONN         0              0                      10.0.2.15%eth0:bootpc      
 ```
 5. ![Home Network](https://github.com/ivkpa/devops-netology/blob/main/images/3.8.3-5-1.png)
 ---
-3.7.2  
+<a name="3.7.2">3.7.2</a>  
   
 1. Win - `ipconfig`, linux - `ip link show`  
 2. LLDP; lldpd; lldpctl.
@@ -505,7 +505,7 @@ iface bond0 inet static
 Linux - `ip neigh show`, `ip neigh del ip dev int`, `ip -s neigh flush all` 
   
 ---
-3.6.1  
+<a name="3.6.1">3.6.1</a>  
   
 1. HTTP/1.1 301 Moved Permanently is used for permanent redirecting
 2. 307 Internal Redirect, document 528ms
@@ -547,7 +547,7 @@ Linux - `ip neigh show`, `ip neigh del ip dev int`, `ip -s neigh flush all`
 `dig -x 8.8.4.4 | grep dns.google.`
 
 ---
-3.5  
+<a name="3.5">3.5</a>  
 1. Файл, в котором последовательности нулевых байтов заменены на информацию об этих последовательностях (список дыр).  
 2. Нет. Потому что это один и тот же объект.  
 3. done
@@ -597,7 +597,7 @@ sdc                    8:32   0  2.5G  0 disk
 20. done  
 
 ---
-3.4.2  
+<a name="3.4.2">3.4.2</a>  
   
 1. done
 2. CPU - `node_cpu_seconds_total{cpu="0",mode="system"}`  
@@ -625,7 +625,7 @@ root          14  0.0  0.0   8892  3288 pts/2    R+   18:23   0:00 ps aux
 `ulimit -u 50` helps to limit amount of processes per user
 
 ---
-3.3.1  
+<a name="3.3.1">3.3.1</a>  
 
 1. `chdir("/tmp")`  
 2. `/etc/magic`  
@@ -690,7 +690,7 @@ sse sse2 ssse3 sse4_1 sse4_2
 (**не** через перенаправление, которым занимается процесс shell'а с правами пользователя) производит запись в файл.
 
 ---
-3.1.1  
+<a name="3.1.1">3.1.1</a>  
 
 1. complete
 2. complete
