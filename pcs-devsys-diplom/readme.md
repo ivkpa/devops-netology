@@ -101,20 +101,45 @@ server {
 `vim /home/devops/nginx-cert-update.sh`  
 ```bash
 #!/usr/bin/env bash
+logfile=nginx-cert-update.log
+certjsonfile=cert_data.json
 cd /home/devops/
-vault write -format=json pki_int/issue/example-dot-com common_name="test.example.com" ttl="750h" > test.example.com.json_data
+export VAULT_ADDR=http://127.0.0.1:8200
+export VAULT_TOKEN=root
+date >> $logfile
+vault write -format=json pki_int/issue/example-dot-com common_name="test.example.com" ttl="750h" > $certjsonfile 2>>$logfile
 if [ "$?" -eq "0" ]
 then
-cat test.example.com.json_data | jq -r .data.certificate > /etc/nginx/ssl/test.example.com.crt
-cat test.example.com.json_data | jq -r .data.issuing_ca >> /etc/nginx/ssl/test.example.com.crt
-cat test.example.com.json_data | jq -r .data.private_key > /etc/nginx/ssl/test.example.com.key
+cat $certjsonfile | jq -r .data.certificate > /etc/nginx/ssl/test.example.com.crt
+cat $certjsonfile | jq -r .data.issuing_ca >> /etc/nginx/ssl/test.example.com.crt
+cat $certjsonfile | jq -r .data.private_key > /etc/nginx/ssl/test.example.com.key
 systemctl restart nginx
+echo New certificate successfully issued >> $logfile
+cat $certjsonfile | jq -r .data.serial_number >> $logfile
+rm $certjsonfile
 else
-  date >> nginx-cert-update-error.log
-  echo [ERROR] Error occurred while issuing new certificate
+	echo Error occurred while issuing new certificate >> $logfile
 fi
 ```  
 `chmod +x /home/devops/nginx-cert-update.sh`  
 10. **Поместите скрипт в crontab, чтобы сертификат обновлялся какого-то числа каждого месяца в удобное для вас время.**  
 `crontab -e`  
-`0 1 1 * * /home/devops/nginx-cert-update.sh`
+`25 9 10 * * /home/devops/nginx-cert-update.sh`  
+
+`cat /var/log/syslog`  
+```
+...
+Jan 10 09:25:01 devserver cron[3077]: (root) RELOAD (crontabs/root)
+Jan 10 09:25:01 devserver CRON[3773]: (root) CMD (/home/devops/nginx-cert-update.sh)
+Jan 10 09:25:02 devserver systemd[1]: Stopping A high performance web server and a reverse proxy server...
+Jan 10 09:25:02 devserver systemd[1]: nginx.service: Succeeded.
+Jan 10 09:25:02 devserver systemd[1]: Stopped A high performance web server and a reverse proxy server.
+Jan 10 09:25:02 devserver systemd[1]: Starting A high performance web server and a reverse proxy server...
+Jan 10 09:25:02 devserver systemd[1]: Started A high performance web server and a reverse proxy server.
+```  
+`cat /home/devops/nginx-cert-update.log`  
+```
+Mon 10 Jan 2022 02:25:01 PM +05
+New certificate successfully issued
+78:29:7e:e6:ed:dc:16:d3:28:64:28:9c:58:42:c3:aa:f2:e4:56:59
+```
