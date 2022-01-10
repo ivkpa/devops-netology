@@ -66,7 +66,7 @@ _Step 4: Request certificate_
 `vault write -format=json pki_int/issue/example-dot-com common_name="test.example.com" ttl="750h" > test.example.com.json_data`
 5. **Установите корневой сертификат созданного центра сертификации в доверенные в хостовой системе.**  
 Копируем CA_cert.crt на хост и добавляем в доверенные корневые центры сертификации:  
-![CAcert](05.png)
+![CAcert](05.png)  
 6. **Установите nginx.**  
 `apt install nginx`  
 7. <b>По инструкции ([ссылка](https://nginx.org/en/docs/http/configuring_https_servers.html)) настройте nginx на https, используя ранее подготовленный сертификат:
@@ -89,7 +89,7 @@ server {
 	#...
 }
 ```
-`systemctl restart nginx`
+`systemctl restart nginx`  
 8. **Откройте в браузере на хосте https адрес страницы, которую обслуживает сервер nginx.**  
 Пробрасываем порты с гостевой виртуалки на хост:  
 ![portForward](08-01.png)  
@@ -114,7 +114,7 @@ else
   echo [ERROR] Error occurred while issuing new certificate
 fi
 ```  
-`chmod +x /home/devops/nginx-cert-update.sh`
+`chmod +x /home/devops/nginx-cert-update.sh`  
 10. **Поместите скрипт в crontab, чтобы сертификат обновлялся какого-то числа каждого месяца в удобное для вас время.**  
 `crontab -e`  
 `0 1 1 * * /home/devops/nginx-cert-update.sh`
