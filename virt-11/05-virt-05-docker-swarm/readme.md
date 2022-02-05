@@ -20,7 +20,7 @@
 docker node ls
 ```
 <p align="center">
-  <img width="1200" height="600" src="sc/sc01.png">
+  <img src="sc/sc01.png">
 </p>
 ## Задача 3
 
@@ -32,6 +32,6 @@ docker service ls
 ```
 
 <p align="center">
-  <img width="1200" height="600" src="sc/sc02.png">
+  <img src="sc/sc02.png">
 </p>
 
